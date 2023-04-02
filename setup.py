@@ -4,7 +4,7 @@ import sys
 if sys.platform == 'darwin':
     data_files = ["oidn/lib.macos.aarch64/libOpenImageDenoise.1.4.3.dylib"]
     platform = 'Mac OS-X'
-elif sys.platform == 'Linux':
+elif sys.platform == 'linux':
     data_files = ["oidn/lib.linux.x64/libOpenImageDenoise.so.1.4.3", "oidn/lib.linux.x64/libtbb.so.12.5"]
     platform = 'Linux'
 elif sys.platform == 'win32':
