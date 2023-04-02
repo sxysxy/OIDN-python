@@ -10,7 +10,7 @@ oidn_py_version = '0.2'
 def __load_lib():
     cur_path = os.path.dirname(__file__)
     if sys.platform == 'linux':
-        return ctypes.CDLL(os.path.join(cur_path, f"lib.linux.x64/libOpenImageDenoise.{oidn_version}.so"))
+        return ctypes.CDLL(os.path.join(cur_path, f"lib.linux.x64/libOpenImageDenoise.so.{oidn_version}"))
     elif sys.platform == 'darwin':
         return ctypes.CDLL(os.path.join(cur_path, f"lib.macos.aarch64/libOpenImageDenoise.{oidn_version}.dylib"))
     elif sys.platform == 'win32':
