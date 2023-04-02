@@ -82,10 +82,10 @@ def NewFilter(device_handle : int, type : str) -> int:
 
 def SetSharedFilterImage(filter_handle : int, name : str, data : np.ndarray, format : int, width : int, height : int, 
                          byteOffset : int = 0, bytePixeldeStride : int = 0, byteRowSride : int = 0):
-    '''
+    r'''
     Args:
         filter_handle(int) : Created by oidn.NewFilter
-        name(str): "color"/"albedo"/"normal"/"output"
+        name(str): color/albedo/normal/output
     '''
     desired_dim3 = [0, 1, 2, 3, 4]
     desired_data_shape = (height, width, desired_dim3[format])
@@ -94,7 +94,7 @@ def SetSharedFilterImage(filter_handle : int, name : str, data : np.ndarray, for
     
     if not data.flags.c_contiguous:
         data = np.ascontiguousarray(data)
-    RawFunctions.oidnSetSharedFilterImage(filter_handle, bytes(name, 'ascii'), data.__array_interface__['data'][0] ,width, height, byteOffset, bytePixeldeStride, bytePixeldeStride)
+    RawFunctions.oidnSetSharedFilterImage(filter_handle, bytes(name, 'ascii'), data.__array_interface__['data'][0] ,width, height, byteOffset, bytePixeldeStride, bytePixeldeStride, byteRowSride)
     
 def CommitFilter(filter_handle : int):
     RawFunctions.oidnCommitFilter(filter_handle)
