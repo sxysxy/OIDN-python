@@ -75,32 +75,43 @@ def NewFilter(device_handle : int, type : str) -> int:
     Creates a new filter of the specified type (e.g. "RT")
     
     Args:
-        device_handle(int)
+        device_handle(int) : Created by NewDevice
         type(str) : e.g. "RT“
     '''
     return RawFunctions.oidnNewFilter(device_handle, bytes(type, 'ascii'))
 
-def SetSharedFilterImage(filter_handle : int, name : str, data : np.ndarray, format : int, width : int, height : int, 
-                         byteOffset : int = 0, bytePixeldeStride : int = 0, byteRowSride : int = 0):
-    r'''
+def SetSharedFilterImage(filter_handle : int, name : str, data : np.ndarray, format : int, width : int, height : int, byteOffset : int = 0, bytePixelStride : int = 0, byteRowStride : int = 0):
+    """
+    Set filter parameters
+    
     Args:
-        filter_handle(int) : Created by oidn.NewFilter
-        name(str): color/albedo/normal/output
-    '''
+        filter_handle(int): Created by NewFilter 
+        name(str): color/albedo/normal/output, See document of OIDN.
+        data(np.array): data buffer, should be correct in size and dtype; should be c_contiguous when name == 'output'
+        format:  Should be oidn.FORMAT_FLOAT3 for image
+        width: width in pixel.
+        height: height in pixel.
+        byteOffset: default to 0
+        bytePixel: default to 0
+        byteRawStride: default to 0
+    """
     desired_dim3 = [0, 1, 2, 3, 4]
     desired_data_shape = (height, width, desired_dim3[format])
     if not data.shape == desired_data_shape:
         raise RuntimeError(f"The shape of the data should be {desired_data_shape}")
+
+    if name == "output" and not data.flags.c_contiguous:
+        raise RuntimeError(f"When name == output, the data should be c_contiguous")
     
     if not data.flags.c_contiguous:
         data = np.ascontiguousarray(data)
-    RawFunctions.oidnSetSharedFilterImage(filter_handle, bytes(name, 'ascii'), data.__array_interface__['data'][0] ,width, height, byteOffset, bytePixeldeStride, bytePixeldeStride, byteRowSride)
+    RawFunctions.oidnSetSharedFilterImage(filter_handle, bytes(name, 'ascii'), data.__array_interface__['data'][0], format, width, height, byteOffset, bytePixelStride, byteRowStride)
     
 def CommitFilter(filter_handle : int):
     RawFunctions.oidnCommitFilter(filter_handle)
     
 def ExecuteFilter(filter_handle : int):
-    RawFunctions.oidnCommitFilter(filter_handle)
+    RawFunctions.oidnExecuteFilter(filter_handle)
     
 def ReleaseFilter(filter_handle : int):
     RawFunctions.oidnReleaseFilter(filter_handle)

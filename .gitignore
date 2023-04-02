@@ -1,5 +1,7 @@
+__pycache__
 build
 dist
 *.egg-info
 MANIFEST.in
 .DS_Store
+tests/DenoiseCornellBox/CornellBoxDenoised.png

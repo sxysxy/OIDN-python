@@ -6,6 +6,3 @@ Install using pip(Only available for Apple Silicon macos for 0.1 alpha version)
 ```
 pip install oidn
 ```
-
-
-
