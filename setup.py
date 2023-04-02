@@ -20,7 +20,7 @@ with open("MANIFEST.in", "w") as f:
 
 setup( 
     name = 'oidn',
-    version = '0.1.alpha',
+    version = '0.1',
     author = 'HfCloud',
     author_email = 'sxysxygm@gmail.com',
     description = 'A simple python binding for Intel OIDN',
