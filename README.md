@@ -7,13 +7,13 @@ Install using pip.
 pip install oidn
 ```
 
-# Features(version 0.2)
+# Features(version 0.2.1)
 
 ## C API wrapper
 
 Wrap OIDN C API, functions are stripped oidn prefix, macros are stripped OIDN_ prefix. For example oidnNewDevice -> oidn.NewDevice, OIDN_FORMAT_FLOAT3 -> oidn.FORMAT_FLOAT3.
 
-### Example denoising image
+# Example denoising image
 
 Denoise image rendered by a monte carlo ray tracer. [code](./tests/DenoiseCornellBox/DenoiseCornellBox.py)
 
@@ -45,6 +45,17 @@ resultImage.save(f"{here}/CornellBoxDenoised.png")
 oidn.ReleaseFilter(filter)
 oidn.ReleaseDevice(device)
 ```
+
+The image in left is before denoised, rendered by a Monte-Carlo PathTracer, spp=10, width=height=1000. The image in right is after denoised.
+
+<div>
+<div style="width:48%; display: inline-block"> 
+<img src="tests/DenoiseCornellBox/CornellBoxNoisy.png">
+</div>
+<div style="width:48%; display: inline-block"> 
+<img src="tests/DenoiseCornellBox/CornellBoxDenoisedAsExample.png">
+</div>
+</div>
 
 ## Object-Oriented Interface
 
