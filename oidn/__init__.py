@@ -5,7 +5,7 @@ import oidn.capi as capi
 from oidn.capi import *
 
 oidn_version = '1.4.3'
-oidn_py_version = '0.2.1'
+oidn_py_version = '0.3alpha'
 
 def __load_lib():
     cur_path = os.path.dirname(__file__)

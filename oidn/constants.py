@@ -5,7 +5,7 @@ Select device automatically
 
 DEVICE_TYPE_CPU = 1
 '''
-CPU device
+CPU device(requires SSE4.1 support or Apple Silicon)
 '''
     
 FORMAT_UNDEFINED = 0,
@@ -18,25 +18,26 @@ FORMAT_FLOAT4   = 4
 # FORMAT_HALF3    = 259
 # FORMAT_HALF4    = 260
     
-ACCESS_READ      = 0
-'''
-Read-only access
-'''
+# Buffer API is disabled 
+# ACCESS_READ      = 0
+# '''
+# Read-only access
+# '''
 
-ACCESS_WRITE     = 1
-'''
-Write-only access
-'''
+# ACCESS_WRITE     = 1
+# '''
+# Write-only access
+# '''
 
-ACCESS_READ_WRITE = 2
-'''
-Read and write access
-'''
+# ACCESS_READ_WRITE = 2
+# '''
+# Read and write access
+# '''
 
-ACCESS_WRITE_DISCARD = 3
-'''
-Write-only access, previous contents discarded
-'''
+# ACCESS_WRITE_DISCARD = 3
+# '''
+# Write-only access, previous contents discarded
+# '''
 
 
 ERROR_NONE                 = 0
