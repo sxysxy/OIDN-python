@@ -4,7 +4,7 @@ Python Binding of [Intel Open Image Denoise](https://github.com/OpenImageDenoise
 Install using pip.(support macos_aarch64, win_amd64, linux_x64).
 
 ```
-pip install oidn
+pip install oidn==0.3a0
 ```
 
 # Features(version 0.3 alpha)
