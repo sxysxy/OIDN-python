@@ -1,20 +1,26 @@
-import sys 
-sys.path.append("../..")
-import oidn
-from PIL import Image
+from pathlib import Path
+import sys
 import numpy as np
-import os
-here = os.path.dirname(__file__)
+from PIL import Image
 
-img = np.array(Image.open(f"{here}/CornellBoxNoisy.png"), dtype=np.float32) / 255.0
+here = Path(__file__).parent.absolute()
+sys.path.append(here.parent.parent.absolute().as_posix())
+
+import oidn
+
+img = np.array(Image.open((here / "CornellBoxNoisy.png").as_posix()), dtype=np.float32) / 255.0
 result = np.zeros_like(img, dtype=np.float32)
 
 device = oidn.NewDevice()
 oidn.CommitDevice(device)
 
 filter = oidn.NewFilter(device, "RT")
-oidn.SetSharedFilterImage(filter, "color", img, oidn.FORMAT_FLOAT3, img.shape[1], img.shape[0])
-oidn.SetSharedFilterImage(filter, "output", result, oidn.FORMAT_FLOAT3, img.shape[1], img.shape[0])
+oidn.SetSharedFilterImage(
+    filter, "color", img, oidn.FORMAT_FLOAT3, img.shape[1], img.shape[0]
+)
+oidn.SetSharedFilterImage(
+    filter, "output", result, oidn.FORMAT_FLOAT3, img.shape[1], img.shape[0]
+)
 oidn.CommitFilter(filter)
 oidn.ExecuteFilter(filter)
 
