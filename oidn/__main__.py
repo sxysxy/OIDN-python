@@ -3,6 +3,9 @@
 import argparse
 from PIL import Image 
 import numpy as np
+import oidn
 
 if __name__ == "__main__":
-    pass
+    with oidn.Device('cpu') as device, oidn.Filter(device, 'RT') as filter:
+        pass
+    

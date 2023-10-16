@@ -1,10 +1,10 @@
 # OIDN-python
-Python Binding of [Intel Open Image Denoise](https://github.com/OpenImageDenoise/oidn) Version 0.3 alpha (Based on OIDN 1.4.3)
+Python Binding of [Intel Open Image Denoise](https://github.com/OpenImageDenoise/oidn) Version 0.4 (Based on OIDN 2.1.0, **NOT FINISHED**)
 
 Install using pip.(support macos_aarch64, win_amd64, linux_x64).
 
 ```
-pip install oidn==0.4
+pip install oidn
 ```
 
 # Features(version 0.4)
