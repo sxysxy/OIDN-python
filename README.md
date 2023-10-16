@@ -76,7 +76,7 @@ The image in left is before denoised, rendered by a Monte-Carlo PathTracer, spp=
 - OOP and pythonic style interfaces (**Not** bindings of original OIDN C++ APIs). 
 
 # Update Log
-- 0.4 : CUDA device is supported now, torch.Tensor and cupy.ndarray could be passed as GPU buffers. Torch and CUPY are counted into optional dependencies.
+- 0.4 : CUDA device is supported now, torch.Tensor could be passed as GPU buffers. Torch is counted into optional dependencies.
 - 0.3.1alpha : Update to new oidn version 2.1.0. Only CPU device is supported at the moment.
 - 0.3alpha : Warp nearly full APIs of OIDN1.4.3 in oidn.h. (excluding buffer APIs, buffers are substituted numpy array), add function \_\_doc\_\_, to be comprehensively test.
 - 0.2.1 : Support win_amd64 and manylinux1_x86_64 platform.

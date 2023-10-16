@@ -67,6 +67,7 @@ class Device(AutoReleaseByContextManaeger):
             raise RuntimeError("Requires device_type in ['cpu', 'cuda']")
         self.device_handle : int = NewDevice(d)
         CommitDevice(self.device_handle)
+        self.type = type
         
     @property
     def error(self):    
@@ -83,12 +84,36 @@ class Device(AutoReleaseByContextManaeger):
             ReleaseDevice(self.device_handle)
         self.native_handle = 0
         
+    @property
+    def is_cpu(self):
+        return self.type == 'cpu'
+
+    @property
+    def is_cuda(self):
+        return self.type == 'cuda'
+        
     
 class Buffer(AutoReleaseByContextManaeger):
-    def __init__(self) -> None:
-        pass
+    def __init__(self, device : Device) -> None:
+        self.device = device
+        self.buffer_delegate = None
+        
     
     def release(self):
+        self.buffer_delegate = None
+    
+    def to_tensor(self):
+        '''
+        Returns:
+            torch.Tensor
+        '''
+        pass 
+    
+    def to_array(self):
+        '''
+        Returns:
+            numpy.ndarray or cupy.ndarray
+        '''
         pass
 
     @classmethod
@@ -115,6 +140,8 @@ class Filter(AutoReleaseByContextManaeger):
             ReleaseFilter(self.filter_handle)
         self.filter_handle = 0
 
+    def execute(self) -> Buffer:
+        pass
 
     
 
