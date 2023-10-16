@@ -156,7 +156,12 @@ def SetDeviceBool(device_handle: int, name: str, value: bool):
         value : parameter value(bool type)
     """
     RawFunctions.oidnSetDeviceBool(device_handle, bytes(name, "ascii"), value)
-
+    
+def SetDevice1b(device_handle: int, name: str, value: bool):
+    r"""
+    Alias for SetDeviceBool
+    """
+    SetDeviceBool(device_handle, name, str)
 
 def SetDeviceInt(device_handle: int, name: str, value: int):
     r"""
@@ -169,6 +174,12 @@ def SetDeviceInt(device_handle: int, name: str, value: int):
         value : parameter value(bool type)
     """
     RawFunctions.oidnSetDeviceInt(device_handle, bytes(name, "ascii"), value)
+    
+def SetDevice1i(device_handle: int, name: str, value: int):
+    r'''
+    Alias for SetDeviceInt
+    '''
+    SetDeviceInt(device_handle, name, value)
 
 
 def GetDeviceInt(device_handle: int, name: str) -> int:
@@ -185,6 +196,11 @@ def GetDeviceInt(device_handle: int, name: str) -> int:
     """
     return RawFunctions.oidnGetDeviceInt(device_handle, bytes(name, "ascii"))
 
+def GetDevice1i(device_handle: int, name: str) -> int:
+    r'''
+    Alias for GetDeviceInt
+    '''
+    return GetDeviceInt(device_handle, name)
 
 def GetDeviceBool(device_handle: int, name: str) -> bool:
     """
@@ -195,6 +211,13 @@ def GetDeviceBool(device_handle: int, name: str) -> bool:
         name : parameter name
     """
     return RawFunctions.oidnGetDeviceBool(device_handle, bytes(name, "ascii"))
+
+
+def GetDevice1b(device_handle: int, name: str) -> bool:
+    r'''
+    Alias for GetDeviceBool
+    '''
+    return GetDeviceBool(device_handle, name)
 
 
 def NewFilter(device_handle: int, type: str) -> int:
@@ -322,6 +345,12 @@ def GetFilterInt(filter_handle: int, name: str) -> int:
     """
     return RawFunctions.oidnGetFilterInt(filter_handle, bytes(name, "ascii"))
 
+def GetFilter1i(filter_handle: int, name: str) -> int:
+    r"""
+    Alias for GetFilterInt
+    """
+    return GetFilterInt(filter_handle, name)
+
 
 def GetFilterBool(filter_handle: int, name: str) -> bool:
     r"""
@@ -336,6 +365,11 @@ def GetFilterBool(filter_handle: int, name: str) -> bool:
     """
     return RawFunctions.oidnGetFilterBool(filter_handle, bytes(name, "ascii"))
 
+def GetFilter1b(filter_handle: bool, name: str) -> bool:
+    r'''
+    Alias for GEtFilterBool
+    '''
+    return GetFilterBool(filter_handle, name)
 
 def GetFilterFloat(filter_handle: int, name: str) -> float:
     r"""
@@ -347,6 +381,8 @@ def GetFilterFloat(filter_handle: int, name: str) -> float:
     """
     return RawFunctions.oidnGetFilterFloat(filter_handle, bytes(name, "ascii"))
 
+def GetFitler1f(filter_handle: int, name: str) -> float:
+    return GetFilterFloat(filter_handle, name)
 
 def SetFilterBool(filter_handle: int, name: str, value: bool):
     r"""
@@ -361,6 +397,12 @@ def SetFilterBool(filter_handle: int, name: str, value: bool):
         value : value of the parameter
     """
     RawFunctions.oidnSetFilterBool(filter_handle, bytes(name, "ascii"), value)
+
+def SetFilter1b(filter_handle: int, name: str, value: bool):
+    r'''
+    Alias for SetFilterBool
+    '''
+    SetFilterBool(filter_handle, name, value)
 
 
 def SetFilterInt(filter_handle: int, name: str, value: int):
@@ -377,6 +419,12 @@ def SetFilterInt(filter_handle: int, name: str, value: int):
     RawFunctions.oidnSetFilterInt(filter_handle, bytes(name, "ascii"), value)
 
 
+def SetFilter1i(filter_handle: int, name: str, value: int):
+    r'''
+    Alias for SetFilterInt
+    '''
+    SetFilterInt(filter_handle, name, value)
+
 def SetFilterFloat(filter_handle: int, name: str, value: float):
     r"""
     Get filter parameter (type float), the name could be:
@@ -387,7 +435,12 @@ def SetFilterFloat(filter_handle: int, name: str, value: float):
         value : value of the parameter
     """
     RawFunctions.oidnSetFilterFloat(filter_handle, bytes(name, "ascii"), value)
-
+    
+def SetFilter1f(filter_handle: int, name : str, value: float):
+    r'''
+    Alias for SetFilterFloat
+    '''
+    SetFilterFloat(filter_handle, name, value)
 
 def CommitFilter(filter_handle: int):
     r"""
