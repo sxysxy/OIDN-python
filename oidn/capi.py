@@ -3,7 +3,7 @@ import os
 from oidn.constants import *
 import typing
 import numpy as np
-
+import importlib
 
 class RawFunctions:
     # Device
@@ -88,7 +88,6 @@ def __init_by_lib(lib: ctypes.CDLL):
     RawFunctions.oidnExecuteFilter = get_func("oidnExecuteFilter", "p", "n")
     RawFunctions.oidnReleaseFilter = get_func("oidnReleaseFilter", "p", "n")
     RawFunctions.oidnRetainFilter = get_func("oidnRetainFilter", "p", "n")
-
 
 def NewDevice(device_type: int = DEVICE_TYPE_DEFAULT) -> int:
     """
@@ -203,7 +202,7 @@ def GetDevice1i(device_handle: int, name: str) -> int:
     return GetDeviceInt(device_handle, name)
 
 def GetDeviceBool(device_handle: int, name: str) -> bool:
-    """
+    r"""
     These parameters can be get by GetDeviceBool:
         setAffinity (default = True): enables thread affinitization (pinning software threads to hardware threads) if it is necessary for achieving optimal performance
     Args:
@@ -392,6 +391,9 @@ def GetFilterFloat(filter_handle: int, name: str) -> float:
     return RawFunctions.oidnGetFilterFloat(filter_handle, bytes(name, "ascii"))
 
 def GetFitler1f(filter_handle: int, name: str) -> float:
+    r'''
+    Alias for GetFilterFloat
+    '''
     return GetFilterFloat(filter_handle, name)
 
 def SetFilterBool(filter_handle: int, name: str, value: bool):

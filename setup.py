@@ -1,11 +1,35 @@
 from setuptools import setup, Extension
 import os
 import sys 
+import subprocess
+import argparse
+
+def check_macos_architecture():
+    p = subprocess.Popen(["file", sys.executable], stdout=subprocess.PIPE)
+    out, err = p.communicate()
+    out = out.decode()
+    if "x86_64" in out or "x64" in out:
+        return 'x64'
+    elif "arm64" in out or "aarch64" in out:
+        return 'aarch64'
+    else:
+        raise RuntimeError("Unknown architecture of this machine, candidate architectures are x64 and aarch64")
+
 if sys.platform == 'darwin':
-    data_files = ["oidn/lib.macos.aarch64/libOpenImageDenoise_core.2.1.0.dylib", 
-                  "oidn/lib.macos.aarch64/libOpenImageDenoise_device_cpu.2.1.0.dylib",
-                  "oidn/lib.macos.aarch64/libOpenImageDenoise.2.1.0.dylib",
-                  "oidn/lib.macos.aarch64/libtbb.12.10.dylib"]
+    if not ('x64' in sys.argv):
+        arch = check_macos_architecture()
+    else:
+        arch = 'aarch64'
+    print(f"Detected architecture is {arch}.")
+    if arch == 'aarch64':
+        data_files = []
+    elif arch == 'x64':
+        data_files = ["oidn/lib.macos.x64/libOpenImageDenoise_core.2.1.0.dylib", 
+                    "oidn/lib.macos.x64/libOpenImageDenoise_device_cpu.2.1.0.dylib",
+                    "oidn/lib.macos.x64/libOpenImageDenoise.2.1.0.dylib",
+                    "oidn/lib.macos.x64/libtbb.12.10.dylib"]
+    else:
+        raise RuntimeError("")
     platform = 'Mac OS-X'
 elif sys.platform == 'linux':
     data_files = ["oidn/lib.linux.x64/libOpenImageDenoise_core.so.2.1.0", 
