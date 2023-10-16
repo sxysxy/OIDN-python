@@ -2,7 +2,6 @@ from setuptools import setup, Extension
 import os
 import sys 
 import subprocess
-import argparse
 
 def check_macos_architecture():
     p = subprocess.Popen(["file", sys.executable], stdout=subprocess.PIPE)
