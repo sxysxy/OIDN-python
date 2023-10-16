@@ -2,25 +2,30 @@ from setuptools import setup, Extension
 import os
 import sys 
 if sys.platform == 'darwin':
-    data_files = ["oidn/lib.macos.aarch64/libOpenImageDenoise.1.4.3.dylib"]
+    data_files = ["oidn/lib.macos.aarch64/libOpenImageDenoise_core.2.1.0.dylib", 
+                  "oidn/lib.macos.aarch64/libOpenImageDenoise_device_cpu.2.1.0.dylib",
+                  "oidn/lib.macos.aarch64/libOpenImageDenoise.2.1.0.dylib",
+                  "oidn/lib.macos.aarch64/libtbb.12.10.dylib"]
     platform = 'Mac OS-X'
 elif sys.platform == 'linux':
-    data_files = ["oidn/lib.linux.x64/libOpenImageDenoise.so.1.4.3", "oidn/lib.linux.x64/libtbb.so.12.5"]
+    data_files = ["oidn/lib.linux.x64/libOpenImageDenoise_core.so.2.1.0", 
+                  "oidn/lib.linux.x64/libOpenImageDenoise_device_cpu.so.2.1.0",
+                  "oidn/lib.linux.x64/libOpenImageDenoise.so.2.1.0",
+                  "oidn/lib.linux.x64/libtbb.so.12.10"]
     platform = 'Linux'
 elif sys.platform == 'win32':
-    data_files = ["oidn/lib.win.x64/OpenImageDenoise.dll", "oidn/lib.win.x64/tbb12.dll"]
+    data_files = ["oidn/lib.win.x64/OpenImageDenoise_core.dll", 
+                  "oidn/lib.win.x64/OpenImageDenoise_device_cpu.dll",
+                  "oidn/lib.win.x64/OpenImageDenoise.dll",
+                  "oidn/lib.win.x64/tbb12.dll"]
     platform = 'Windows'
-
-# data_files = ["oidn/lib.macos.aarch64/libOpenImageDenoise.1.4.3.dylib", 
-#              "oidn/lib.linux.x64/libOpenImageDenoise.so.1.4.3", "oidn/lib.linux.x64/libtbb.so.12.5", 
-#              "oidn/lib.win.x64/OpenImageDenoise.dll", "oidn/lib.win.x64/tbb12.dll"]
     
 with open("MANIFEST.in", "w") as f:
     f.write(f"include {' '.join(data_files)}")
 
 setup( 
     name = 'oidn',
-    version = '0.3alpha',
+    version = '0.4',
     author = 'HfCloud',
     author_email = 'sxysxygm@gmail.com',
     description = 'A simple python binding for Intel OIDN',

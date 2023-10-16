@@ -20,10 +20,10 @@ class RawFunctions:
     # Filter API
     oidnNewFilter = None
     oidnSetSharedFilterImage = None
-    oidnRemoveFilterImage = None
+    oidnUnsetFilterImage = None
     oidnSetSharedFilterData = None
     oidnUpdateFilterData = None
-    oidnRemoveFilterData = None
+    oidnUnsetFilterData = None
     oidnSetFilterBool = None
     oidnGetFilterBool = None
     oidnSetFilterInt = None
@@ -282,15 +282,20 @@ def SetSharedFilterImage(
     )
 
 
-def RemoveFilterImage(filter_handle: int, name: str):
+def UnsetFilterImage(filter_handle: int, name: str):
     r"""
     Remove filter image, name could be color | albedo | normal | output
     Args:
         filter_handle : handle of fitler, get from NewFitler
         name : image name
     """
-    RawFunctions.oidnRemoveFilterImage(filter_handle, bytes(name, "ascii"))
-
+    RawFunctions.oidnUnsetFilterImage(filter_handle, bytes(name, "ascii"))
+    
+def RemoveFilterImage(filter_handle: int, name: str):
+    r'''
+    Alias for UnsetFilterImage
+    '''
+    UnsetFilterImage(filter_handle, name)
 
 def SetSharedFilterData(filter_handle: int, name: str, data: np.array):
     r"""
@@ -322,7 +327,7 @@ def UpdateFilterData(filter_handle: int, name: str):
     RawFunctions.oidnUpdateFilterData(filter_handle, bytes(name, "ascii"))
 
 
-def RemoveFilterData(filter_handle: int, name: str):
+def UnsetFilterData(filter_handle: int, name: str):
     r"""
     Remove the filter data, name can be weight.
 
@@ -330,8 +335,13 @@ def RemoveFilterData(filter_handle: int, name: str):
         fitler_handle : Get from NewFilter
         name : name of the data
     """
-    RawFunctions.oidnRemoveFilterData(filter_handle, bytes(name, "ascii"))
-
+    RawFunctions.oidnUnsetFilterData(filter_handle, bytes(name, "ascii"))
+    
+def RemoveFilterData(filter_handle: int, name: str):
+    r'''
+    Alias for UnsetFilterData
+    '''
+    UnsetFilterData(filter_handle, name)    
 
 def GetFilterInt(filter_handle: int, name: str) -> int:
     r"""

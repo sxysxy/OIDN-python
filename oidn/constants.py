@@ -1,11 +1,16 @@
 DEVICE_TYPE_DEFAULT = 0
 '''
-Select device automatically
+Select device automatically. CUDA is selected if available, or uses cpu.
 '''
 
 DEVICE_TYPE_CPU = 1
 '''
-CPU device(requires SSE4.1 support or Apple Silicon)
+CPU device(Requires SSE4.1 support on X86 platform, or Apple Silicon)
+'''
+
+DEVICE_TYPE_CUDA = 3
+'''
+CUDA device
 '''
     
 FORMAT_UNDEFINED = 0,
@@ -13,10 +18,10 @@ FORMAT_FLOAT    = 1
 FORMAT_FLOAT2   = 2
 FORMAT_FLOAT3   = 3
 FORMAT_FLOAT4   = 4
-# FORMAT_HALF     = 257
-# FORMAT_HALF2    = 258
-# FORMAT_HALF3    = 259
-# FORMAT_HALF4    = 260
+FORMAT_HALF     = 257
+FORMAT_HALF2    = 258
+FORMAT_HALF3    = 259
+FORMAT_HALF4    = 260
     
 # Buffer API is disabled 
 # ACCESS_READ      = 0
