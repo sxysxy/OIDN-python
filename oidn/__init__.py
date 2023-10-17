@@ -71,26 +71,48 @@ class Device(AutoReleaseByContextManaeger):
         
     @property
     def error(self):    
+        '''
+        Returns a tuple[error_code, error_message], the same as oidn.GetDeviceError.
+        '''
         return GetDeviceError(self.device_handle)
     
     def raise_if_error(self):
+        '''
+        Raise a RuntimeError if an error occured.
+        '''
         err = self.error
         if err is None:
             if err[0] != 0:
                 raise RuntimeError(err[1])
             
     def release(self):
+        '''
+        Call ReleaseDevice with self.device_handle
+        '''
         if self.device_handle:  #not 0, not None
             ReleaseDevice(self.device_handle)
         self.native_handle = 0
         
     @property
     def is_cpu(self):
+        '''
+        Indicate whether it is a CPU device.
+        '''
         return self.type == 'cpu'
 
     @property
     def is_cuda(self):
+        '''
+        Indicate wheter it is a CUDA device.
+        '''
         return self.type == 'cuda'
+    
+    @property
+    def device_handle(self):
+        '''
+        Returns the device handle
+        '''
+        return self.device_handle
         
     
 class Buffer(AutoReleaseByContextManaeger):
@@ -100,6 +122,9 @@ class Buffer(AutoReleaseByContextManaeger):
         
     
     def release(self):
+        '''
+        Release corresponding resources.
+        '''
         self.buffer_delegate = None
     
     def to_tensor(self):
@@ -125,7 +150,8 @@ class Filter(AutoReleaseByContextManaeger):
     def __init__(self, device : Device, type : str) -> None:
         r'''
         Args:
-            type: 'RT' or 'RTLightmap'
+            device : oidn.Device
+            type   : 'RT' or 'RTLightmap'
         '''
         self.device = device
         self.filter_handle : int = NewFilter(device_handle=device.device_handle, type=type)
@@ -134,14 +160,30 @@ class Filter(AutoReleaseByContextManaeger):
         device.raise_if_error()
         CommitFilter(self.filter_handle)
         device.raise_if_error()
+        
+    @property
+    def filter_handle(self) -> int:
+        '''
+        Returns the handle of filter.
+        '''
+        return self.filter_handle
     
     def release(self):
+        r'''
+        Call ReleaseFilter with self.fitler_handle
+        '''
         if self.filter_handle:
             ReleaseFilter(self.filter_handle)
         self.filter_handle = 0
 
-    def execute(self) -> Buffer:
-        pass
+    def execute(self):
+        r'''
+        Run the filter, wait until finished.
+        '''
+        if self.filter_handle:
+            ExecuteFilter(self.filter_handle)
+        else:
+            raise RuntimeError("Invalid filter handle")
 
     
 

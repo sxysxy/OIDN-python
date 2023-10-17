@@ -4,4 +4,5 @@ dist
 *.egg-info
 MANIFEST.in
 .DS_Store
+APIs.md
 tests/DenoiseCornellBox/CornellBoxDenoised.png

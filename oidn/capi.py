@@ -390,7 +390,7 @@ def GetFilterFloat(filter_handle: int, name: str) -> float:
     """
     return RawFunctions.oidnGetFilterFloat(filter_handle, bytes(name, "ascii"))
 
-def GetFitler1f(filter_handle: int, name: str) -> float:
+def GetFilter1f(filter_handle: int, name: str) -> float:
     r'''
     Alias for GetFilterFloat
     '''
