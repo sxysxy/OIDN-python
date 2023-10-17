@@ -4,6 +4,7 @@ from oidn.constants import *
 import typing
 import numpy as np
 import importlib
+from typing import Callable
 
 class RawFunctions:
     # Device
@@ -272,6 +273,46 @@ def SetSharedFilterImage(
         filter_handle,
         bytes(name, "ascii"),
         data.__array_interface__["data"][0],
+        format,
+        width,
+        height,
+        byteOffset,
+        bytePixelStride,
+        byteRowStride,
+    )
+    
+def SetSharedFilterImageEx(
+    filter_handle: int,
+    name: str,
+    data: object,
+    get_shape : Callable,
+    check_c_contiguous: Callable,
+    get_array_interface: Callable,
+    format: int,
+    width: int,
+    height: int,
+    byteOffset: int = 0,
+    bytePixelStride: int = 0,
+    byteRowStride: int = 0):
+    r'''
+    Used internelly. 'data' parameter could be any buffer type, requring get_shape, check_c_contiguous, get_array_interface.
+    '''
+    desired_dim3 = [0, 1, 2, 3, 4]
+    desired_data_shape = (height, width, desired_dim3[format])
+    shape = get_shape(data)
+    if not shape == desired_data_shape:
+        raise RuntimeError(f"The shape of the data should be {desired_data_shape}")
+
+    if name == "output" and not check_c_contiguous(data):
+        raise RuntimeError(f"When name == output, the data should be c_contiguous")
+
+    if not check_c_contiguous(data):
+        data = np.ascontiguousarray(data)
+        
+    RawFunctions.oidnSetSharedFilterImage(
+        filter_handle,
+        bytes(name, "ascii"),
+        get_array_interface(data)["data"][0],
         format,
         width,
         height,
