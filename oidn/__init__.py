@@ -69,7 +69,9 @@ class Device(AutoReleaseByContextManaeger):
         else:
             raise RuntimeError("Requires device_type in ['cpu', 'cuda']")
         self.__device_handle : int = NewDevice(d)
+        self.raise_if_error()
         CommitDevice(self.device_handle)
+        self.raise_if_error()
         self.type = device_type
         
     @property
@@ -84,7 +86,7 @@ class Device(AutoReleaseByContextManaeger):
         Raise a RuntimeError if an error occured.
         '''
         err = self.error
-        if err is None:
+        if not (err is None):
             if err[0] != 0:
                 raise RuntimeError(err[1])
             
@@ -278,7 +280,7 @@ class Buffer(AutoReleaseByContextManaeger):
     def to_array(self):
         '''
         Returns:
-            numpy.ndarray or cupy.ndarray
+            numpy.ndarray
         '''
         if isinstance(self.buffer_delegate, np.ndarray):
             return self.buffer_delegate

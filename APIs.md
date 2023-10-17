@@ -398,7 +398,7 @@ Release corresponding resources.
 ### to\_array(self): <div style="text-align: right; float: right; color: #215f11">method</div> 
 ```
 Returns:
-            numpy.ndarray or cupy.ndarray
+            numpy.ndarray
 ```
 ### to\_tensor(self): <div style="text-align: right; float: right; color: #215f11">method</div> 
 ```
