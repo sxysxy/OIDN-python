@@ -377,6 +377,7 @@ class Filter(AutoReleaseByContextManaeger):
         '''
         if self.filter_handle:
             ExecuteFilter(self.filter_handle)
+            self.device.raise_if_error()
         else:
             raise RuntimeError("Invalid filter handle")
 
