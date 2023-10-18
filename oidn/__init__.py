@@ -69,9 +69,9 @@ class Device(AutoReleaseByContextManaeger):
         else:
             raise RuntimeError("Requires device_type in ['cpu', 'cuda']")
         self.__device_handle : int = NewDevice(d)
-        self.raise_if_error()
+        #self.raise_if_error()
         CommitDevice(self.device_handle)
-        self.raise_if_error()
+        #self.raise_if_error()
         self.type = device_type
         
     @property
@@ -132,6 +132,7 @@ def _lazy_load_torch(raise_if_no_torch = True):
                 return None
         if not _torch.cuda.is_available():
             raise RuntimeError("Requires torch.cuda.is_available(), please check your torch installation.")
+        return _torch
     else:
         return _torch
         
@@ -209,30 +210,36 @@ class Buffer(AutoReleaseByContextManaeger):
         return bf    
     
     @classmethod
-    def load(cls, device : Device, source, copy_data=True, div255=True):
+    def load(cls, device : Device, source, normalize, copy_data=True):
         '''
         Create a Buffer object from a data source.
         Args:
             device    : Device of the new Buffer object
             soruce    : Data source, could be PIL.Image, numpy.ndarray, torch.Tensor. If it is PIL.Image, copy_data will always be True.
+            normalize : Normalize values into [0,1] by dividing 255(if source.dtype is uint8) or 65535(if source.dtype is uint16), useful for Image objects, if it is True, copy_data should also be True.  
             copy_data : Copy the source's data into a new container.
-            div255    : Div values by 255, useful for Image objects, if it is True, copy_data should also be True.
         '''
-        if div255 and (not copy_data):
+        if normalize and (not copy_data):
             raise RuntimeError("Setting div255 = True requires copy_data = True")
         
         if isinstance(source, Image.Image):
             #source : Image = source
-            x_np = np.array(source, dtype=np.float32)
-            if div255:
-                x_np /= 255.0
+            x_np = np.array(source)
+            if normalize:
+                if x_np.dtype == np.uint8:
+                    x_np = x_np.astype(np.float32) / 255.0
+                elif x_np.dtype == np.uint16:
+                    x_np = x_np.astype(np.float32) / 65535.0
         elif isinstance(source, np.ndarray):
             if not copy_data:
                 x_np = source
             else:
                 x_np = np.array(source)
-            if div255:
-                x_np /= 255.0
+            if normalize:
+                if x_np.dtype == np.uint8:
+                    x_np = x_np.astype(np.float32) / 255.0
+                elif x_np.dtype == np.uint16:
+                    x_np = x_np.astype(np.float32) / 65535.0
         else:
             torch = _lazy_load_torch(False)
             if torch and isinstance(source, torch.Tensor):
@@ -241,6 +248,11 @@ class Buffer(AutoReleaseByContextManaeger):
                         x_pt = source 
                     else:
                         x_pt = torch.tensor(source)
+                    if normalize:
+                        if x_pt.dtype == torch.uint8:
+                            x_pt = x_pt.float() / 255.0
+                        elif x_pt.dtype == torch.short:
+                            x_pt = x_pt.float() / 65535.0 
                 else:
                     raise RuntimeError("Requires source.is_cuda when source is a torch.Tensor")
             else:
@@ -312,9 +324,9 @@ class Filter(AutoReleaseByContextManaeger):
         self.__filter_handle : int = NewFilter(device_handle=device.device_handle, type=type)
         if not self.filter_handle:
             raise RuntimeError("Can't create filter")
-        device.raise_if_error()
-        CommitFilter(self.filter_handle)
-        device.raise_if_error()
+        self.device.raise_if_error()
+        CommitFilter(self.__filter_handle)
+        self.device.raise_if_error()
         
     @property
     def filter_handle(self) -> int:
@@ -327,8 +339,8 @@ class Filter(AutoReleaseByContextManaeger):
         r'''
         Call ReleaseFilter with self.fitler_handle
         '''
-        if self.filter_handle:
-            ReleaseFilter(self.filter_handle)
+        if self.__filter_handle:
+            ReleaseFilter(self.__filter_handle)
         self.__filter_handle = 0
         
     def set_image(self, name : str, buffer : Buffer):
@@ -370,6 +382,7 @@ class Filter(AutoReleaseByContextManaeger):
                                get_shape=get_shape, check_c_contiguous=get_c_contiguous, get_array_interface=get_array_interface,
                                format=buffer.format, width=buffer.width, height=buffer.height)
         CommitFilter(self.filter_handle)
+        self.device.raise_if_error()
 
     def execute(self):
         r'''
