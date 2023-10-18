@@ -314,7 +314,7 @@ class Filter(AutoReleaseByContextManaeger):
             raise RuntimeError("Can't create filter")
         device.raise_if_error()
         CommitFilter(self.filter_handle)
-        device.raise_if_error()
+       # device.raise_if_error()
         
     @property
     def filter_handle(self) -> int:

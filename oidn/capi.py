@@ -4,6 +4,7 @@ from oidn.constants import *
 import typing
 import numpy as np
 import importlib
+import struct
 from typing import Callable
 
 class RawFunctions:
@@ -117,17 +118,25 @@ def GetDeviceError(device_handle: int) -> tuple[int, str]:
     Returns:
         tuple of (error_code : int, error_message : str)
     """
-    err = RawFunctions.oidnGetDeviceError(device_handle, 0)
+    buf = b"\0\0\0\0\0\0\0\0"
+    buf_ptr = ctypes.c_char_p(buf)
+    err = RawFunctions.oidnGetDeviceError(device_handle, buf_ptr)
+    errmsg_ptr = ctypes.c_char_p(struct.unpack("L", buf)[0])
+    
+    errmsg = ""
+    if not (errmsg_ptr.value is None):
+        errmsg = errmsg_ptr.value.decode()
+    
     msg = [
-        "no error occurred",
-        "an unknown error occurred",
-        "an invalid argument was specified",
-        "the operation is not allowed",
-        "not enough memory to execute the operation",
-        "the hardware (e.g., CPU) is not supported",
-        "the operation was cancelled by the user",
+        "No error occurred.",
+        "An unknown error occurred: ",
+        "An invalid argument was specified: ",
+        "The operation is not allowed: ",
+        "No enough memory to execute the operation: ",
+        "The hardware (e.g., CPU) is not supported: ",
+        "The operation was cancelled by the user: ",
     ]
-    return err, msg[err]
+    return err, msg[err] + errmsg
 
 
 def ReleaseDevice(device_handle: int):
