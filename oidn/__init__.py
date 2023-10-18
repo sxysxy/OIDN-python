@@ -363,11 +363,11 @@ class Filter(AutoReleaseByContextManaeger):
         if self.device.is_cuda and (not buffer.device.is_cuda):
             raise RuntimeError("The filter is on CUDA but the buffer is not")
         
-        def get_c_contiguous(b : Buffer):
+        def is_c_contiguous(b : Buffer):
             if isinstance(b.buffer_delegate, np.ndarray):
                 return b.buffer_delegate.flags.c_contiguous
             else:
-                return b.is_contiguous()
+                return b.buffer_delegate.is_contiguous()
                 
         def get_shape(b : Buffer):
             return b.buffer_delegate.shape
@@ -379,16 +379,17 @@ class Filter(AutoReleaseByContextManaeger):
                 return b.buffer_delegate.__cuda_array_interface__
         
         SetSharedFilterImageEx(self.filter_handle, name, buffer,
-                               get_shape=get_shape, check_c_contiguous=get_c_contiguous, get_array_interface=get_array_interface,
+                               get_shape=get_shape, check_c_contiguous=is_c_contiguous, get_array_interface=get_array_interface,
                                format=buffer.format, width=buffer.width, height=buffer.height)
-        CommitFilter(self.filter_handle)
-        self.device.raise_if_error()
+       # CommitFilter(self.filter_handle)
+       # self.device.raise_if_error()
 
     def execute(self):
         r'''
         Run the filter, wait until finished.
         '''
         if self.filter_handle:
+            CommitFilter(self.filter_handle)
             ExecuteFilter(self.filter_handle)
             self.device.raise_if_error()
         else:

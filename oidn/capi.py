@@ -316,7 +316,8 @@ def SetSharedFilterImageEx(
         raise RuntimeError(f"When name == output, the data should be c_contiguous")
 
     if not check_c_contiguous(data):
-        data = np.ascontiguousarray(data)
+        raise RuntimeError(f"Requires C contiguous data for {name}")
+        # data = np.ascontiguousarray(data)
         
     RawFunctions.oidnSetSharedFilterImage(
         filter_handle,
